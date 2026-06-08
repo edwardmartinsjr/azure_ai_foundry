@@ -8,7 +8,6 @@ from azure.ai.projects.models import FunctionTool
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
 from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
-# from functions import next_visible_event, calculate_observation_cost, generate_observation_report
 from functions import create_expense
 
 
