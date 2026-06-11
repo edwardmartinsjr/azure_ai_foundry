@@ -2,7 +2,7 @@
 
 This folder contains Python samples that create a Microsoft Agent Framework agent backed by Azure AI Foundry and register a local Python function as a tool for submitting expense claims.
 
-The app in `agent.py`:
+The app in `expenses-agent.py`:
 
 - Loads Azure AI Foundry settings from `.env`.
 - Connects to an Azure AI Foundry project with `AzureCliCredential`.
@@ -12,14 +12,14 @@ The app in `agent.py`:
 - Runs a single sample expense-submission request.
 - Writes the submitted claim to a local `ticket-<number>.txt` file.
 
-The app in `agent-devui.py` uses the same agent configuration, but hosts it in Agent Framework Dev UI so you can chat with the agent from a browser instead of running one hard-coded request.
+The app in `expenses-agent-devui.py` uses the same agent configuration, but hosts it in Agent Framework Dev UI so you can chat with the agent from a browser instead of running one hard-coded request.
 
 ## Files
 
 | File | Description |
 | --- | --- |
-| `agent.py` | Main console application that creates and runs the Agent Framework expense agent. |
-| `agent-devui.py` | Dev UI host that exposes the same expense agent in a browser on port `8090`. |
+| `expenses-agent.py` | Main console application that creates and runs the Agent Framework expense agent. |
+| `expenses-agent-devui.py` | Dev UI host that exposes the same expense agent in a browser on port `8090`. |
 | `functions.py` | Defines the `create_expense` function tool used by the agent. |
 | `.env` | Stores the Azure AI Foundry endpoint and model deployment name. |
 
@@ -57,7 +57,7 @@ az login
 Start the agent:
 
 ```powershell
-python agent.py
+python expenses-agent.py
 ```
 
 The script sends this sample request to the agent:
@@ -73,7 +73,7 @@ If the model decides the request should create an expense claim, Agent Framework
 Start the browser-based Dev UI host:
 
 ```powershell
-python agent-devui.py
+python expenses-agent-devui.py
 ```
 
 The script calls:
@@ -94,7 +94,7 @@ Use the chat UI to submit prompts such as:
 Submit an expense for alex@example.com: customer visit travel, $125.50
 ```
 
-Unlike `agent.py`, the Dev UI sample does not call `agent.run(...)` directly and does not need an explicit `asyncio.run(...)` entry point in the script. The `serve(...)` helper owns the local web server lifecycle and handles the framework's async work behind the browser experience.
+Unlike `expenses-agent.py`, the Dev UI sample does not call `agent.run(...)` directly and does not need an explicit `asyncio.run(...)` entry point in the script. The `serve(...)` helper owns the local web server lifecycle and handles the framework's async work behind the browser experience.
 
 ## Function Tool
 
