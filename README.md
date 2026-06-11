@@ -10,6 +10,7 @@ Each exercise is organized in its own folder and includes the code, dependencies
 | --- | --- |
 | [`agent-custom-tools/`](agent-custom-tools/) | Python console app that creates an Azure AI Foundry agent with a custom function tool for submitting expense claims. |
 | [`agent-framework/`](agent-framework/) | Microsoft Agent Framework samples for an Azure AI Foundry-backed expense agent, including console and Dev UI variants. |
+| [`agent-workflow/`](agent-workflow/) | Python client for invoking a Microsoft Foundry customer support triage workflow that classifies tickets and drafts responses. |
 
 ## Prerequisites
 
