@@ -8,9 +8,9 @@ Each exercise is organized in its own folder and includes the code, dependencies
 
 | Exercise | Description |
 | --- | --- |
-| [`agent-custom-tools/`](agent-custom-tools/) | Python console app that creates an Azure AI Foundry agent with a custom function tool for submitting expense claims. |
-| [`agent-framework/`](agent-framework/) | Microsoft Agent Framework samples for an Azure AI Foundry-backed expense agent, including console and Dev UI variants. |
-| [`agent-workflow/`](agent-workflow/) | Python client for invoking a Microsoft Foundry customer support triage workflow that classifies tickets and drafts responses. |
+| [`azure-ai-agent-custom-tools/`](azure-ai-agent-custom-tools/) | Python console app that creates an Azure AI Foundry agent with a custom function tool for submitting expense claims. |
+| [`maf-agent-custom-tools/`](maf-agent-custom-tools/) | Microsoft Agent Framework samples for an Azure AI Foundry-backed expense agent, including console and Dev UI variants. |
+| [`azure-ai-agent-workflow/`](azure-ai-agent-workflow/) | Python client for invoking a Microsoft Foundry customer support triage workflow that classifies tickets and drafts responses. |
 
 ## Prerequisites
 
@@ -31,11 +31,11 @@ Choose an exercise folder, then follow the README in that folder.
 For example, to run the Agent Framework exercise:
 
 ```powershell
-cd agent-framework
+cd maf-agent-custom-tools
 pip install -r requirements.txt
 ```
 
-Create any required local configuration files described by the exercise README. For `agent-framework/`, create a `.env` file with:
+Create any required local configuration files described by the exercise README. Create a `.env` file with:
 
 ```env
 PROJECT_ENDPOINT=your_project_endpoint
@@ -67,7 +67,7 @@ Each exercise folder should include its own `README.md` with:
 - Cleanup notes
 - Troubleshooting guidance
 
-Start with [agent-framework/README.md](agent-framework/README.md) for the Agent Framework expense-agent exercise.
+E.g.: Start with [maf-agent-custom-tools/README.md](maf-agent-custom-tools/README.md) for the Agent Framework expense-agent exercise.
 
 ## Generated Files
 
