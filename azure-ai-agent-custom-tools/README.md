@@ -2,7 +2,7 @@
 
 This folder contains a Python console app that creates an Azure AI Foundry agent with a custom function tool for submitting expense claims.
 
-The app in `agent.py`:
+The app in `expenses-agent.py`:
 
 - Loads Azure AI Foundry settings from `.env`.
 - Connects to an Azure AI Foundry project with `DefaultAzureCredential`.
@@ -17,7 +17,7 @@ The app in `agent.py`:
 
 | File | Description |
 | --- | --- |
-| `agent.py` | Main console application that creates and runs the expense agent. |
+| `expenses-agent.py` | Main console application that creates and runs the expense agent. |
 | `functions.py` | Defines the `create_expense` function tool used by the agent. |
 | `.env` | Stores the Azure AI Foundry endpoint and model deployment name. |
 | `requirements.txt` | Python package dependencies. |
@@ -56,7 +56,7 @@ az login
 Start the agent:
 
 ```powershell
-python agent.py
+python expenses-agent.py
 ```
 
 At the prompt, ask the agent to create an expense claim. For example:
