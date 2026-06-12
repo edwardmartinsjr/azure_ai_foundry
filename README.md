@@ -9,6 +9,7 @@ Each exercise is organized in its own folder and includes the code, dependencies
 | Exercise | Description |
 | --- | --- |
 | [`azure-ai-agent-custom-tools/`](azure-ai-agent-custom-tools/) | Python console app that creates an Azure AI Foundry agent with a custom function tool for submitting expense claims. |
+| [`azure-ai-agent-mcp/`](azure-ai-agent-mcp/) | Python sample that creates an Azure AI Foundry agent with a Microsoft Learn Model Context Protocol (MCP) tool. |
 | [`maf-agent-custom-tools/`](maf-agent-custom-tools/) | Microsoft Agent Framework samples for an Azure AI Foundry-backed expense agent, including console and Dev UI variants. |
 | [`azure-ai-agent-workflow/`](azure-ai-agent-workflow/) | Python client for invoking a Microsoft Foundry customer support triage workflow that classifies tickets and drafts responses. |
 
@@ -67,7 +68,7 @@ Each exercise folder should include its own `README.md` with:
 - Cleanup notes
 - Troubleshooting guidance
 
-E.g.: Start with [maf-agent-custom-tools/README.md](maf-agent-custom-tools/README.md) for the Agent Framework expense-agent exercise.
+For example, start with [maf-agent-custom-tools/README.md](maf-agent-custom-tools/README.md) for the Agent Framework expense-agent exercise, or [azure-ai-agent-mcp/README.md](azure-ai-agent-mcp/README.md) for the Microsoft Learn MCP agent exercise.
 
 ## Generated Files
 
