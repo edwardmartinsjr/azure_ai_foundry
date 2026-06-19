@@ -13,6 +13,7 @@ Each exercise is organized in its own folder and includes the code, dependencies
 | [`maf-agent-custom-tools/`](maf-agent-custom-tools/) | Microsoft Agent Framework samples for an Azure AI Foundry-backed expense agent, including console and Dev UI variants. |
 | [`maf-agent-mcp/`](maf-agent-mcp/) | Microsoft Agent Framework sample that connects an Azure AI Foundry-backed agent to the Microsoft Learn MCP server. |
 | [`azure-ai-agent-workflow/`](azure-ai-agent-workflow/) | Python client for invoking a Microsoft Foundry customer support triage workflow that classifies tickets and drafts responses. |
+| [`mfa-agent-searchservice/`](mfa-agent-searchservice/) | Microsoft Agent Framework sample that loads warehouse inventory data into Azure AI Search and runs an inventory analysis agent with search context. |
 
 ## Prerequisites
 
@@ -69,7 +70,7 @@ Each exercise folder should include its own `README.md` with:
 - Cleanup notes
 - Troubleshooting guidance
 
-For example, start with [maf-agent-custom-tools/README.md](maf-agent-custom-tools/README.md) for the Agent Framework expense-agent exercise, [azure-ai-agent-mcp/README.md](azure-ai-agent-mcp/README.md) for the Azure AI Foundry MCP agent exercise, or [maf-agent-mcp/README.md](maf-agent-mcp/README.md) for the Agent Framework MCP agent exercise.
+For example, start with [maf-agent-custom-tools/README.md](maf-agent-custom-tools/README.md) for the Agent Framework expense-agent exercise, [azure-ai-agent-mcp/README.md](azure-ai-agent-mcp/README.md) for the Azure AI Foundry MCP agent exercise, [maf-agent-mcp/README.md](maf-agent-mcp/README.md) for the Agent Framework MCP agent exercise, or [mfa-agent-searchservice/README.md](mfa-agent-searchservice/README.md) for the Azure AI Search inventory-agent exercise.
 
 ## Generated Files
 
