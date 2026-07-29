@@ -83,7 +83,7 @@ trigger:
       elseActions:
         - kind: SendActivity
           activity: |-
-            That question is outside what I can help with at Edward's Bakery.
+            That question is outside what I can help with at our Bakery.
               I can help with:
               - Order status, changes, and refunds
               - Menu items, prices, ingredients, and allergens

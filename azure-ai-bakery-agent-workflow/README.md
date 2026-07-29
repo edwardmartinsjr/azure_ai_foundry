@@ -1,4 +1,4 @@
-# Edward's Bakery Agent Workflow
+# Bakery Agent Workflow
 
 This sample implements a multi-agent customer-support workflow for Edward's
 Bakery in Microsoft Foundry. The workflow runs in the Foundry workflow builder,
