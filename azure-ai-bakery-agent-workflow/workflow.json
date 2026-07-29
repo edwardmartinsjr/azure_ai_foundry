@@ -1,0 +1,115 @@
+kind: workflow
+trigger:
+  kind: OnConversationStart
+  id: trigger_wf
+  actions:
+    - kind: SetVariable
+      id: questionplaintext
+      variable: Local.question
+      value: =System.LastMessage.Text
+    - kind: SetVariable
+      id: SetVarUserMessage
+      variable: Local.UserMessage
+      value: =UserMessage(System.LastMessage.Text)
+    - kind: InvokeAzureAgent
+      id: OrchestratorAgent
+      agent:
+        name: bakery-orchestrator
+      conversationId: =System.ConversationId
+      input:
+        messages: =Local.UserMessage
+      output:
+        autoSend: true
+        responseObject: Local.OrchestratorResponse
+    - kind: SetVariable
+      id: SetRouteVar
+      variable: Local.Route
+      value: =Lower(Local.OrchestratorResponse.route)
+    - kind: ConditionGroup
+      conditions:
+        - condition: =Local.Route = "orders"
+          actions:
+            - kind: InvokeAzureAgent
+              id: ordersAgent
+              agent:
+                name: bakery-orders
+              conversationId: =System.ConversationId
+              input:
+                messages: =Local.UserMessage
+              output:
+                autoSend: true
+                responseObject: Local.SpecialistResponse
+          id: if-orders
+        - condition: =Local.Route = "menu"
+          actions:
+            - kind: InvokeAzureAgent
+              id: MenuAgent
+              agent:
+                name: bakery-menu
+              conversationId: =System.ConversationId
+              input:
+                messages: =Local.UserMessage
+              output:
+                autoSend: true
+                responseObject: Local.SpecialistResponse
+          id: if-menu
+        - condition: =Local.Route = "complaints"
+          actions:
+            - kind: InvokeAzureAgent
+              id: ComplaintsAgent
+              agent:
+                name: bakery-complaints
+              conversationId: =System.ConversationId
+              input:
+                messages: =Local.UserMessage
+              output:
+                autoSend: true
+                responseObject: Local.SpecialistResponse
+          id: if-complaints
+        - condition: =Local.Route = "hours"
+          actions:
+            - kind: InvokeAzureAgent
+              id: HoursAgent
+              agent:
+                name: bakery-hours
+              conversationId: =System.ConversationId
+              input:
+                messages: =Local.UserMessage
+              output:
+                autoSend: true
+                responseObject: Local.SpecialistResponse
+          id: if-hours
+      id: node-1780349139659
+      elseActions:
+        - kind: SendActivity
+          activity: |-
+            That question is outside what I can help with at Edward's Bakery.
+              I can help with:
+              - Order status, changes, and refunds
+              - Menu items, prices, ingredients, and allergens
+              - Complaints and feedback about your order
+              - Store hours, locations, and delivery coverage
+            Try one of those and I will get you the right answer.
+          id: SendMessageCatchAll
+    - kind: ConditionGroup
+      conditions:
+        - condition: =Local.Route <> "else"
+          actions:
+            - kind: SetVariable
+              id: SetSynthesizerInput
+              variable: Local.SynthesizerInput
+              value: '="Customer question: " & Local.question & Char(10) & "Specialist answer: " & Local.SpecialistResponse.answer'
+            - kind: InvokeAzureAgent
+              id: SynthesizerAgent
+              agent:
+                name: bakery-synthesizer
+              conversationId: =System.ConversationId
+              input:
+                messages: =Local.SynthesizerInput
+              output:
+                autoSend: true
+          id: if-not-else
+      id: node-1780349614635
+id: ""
+name: BakeryOrchestrator
+description: ""
