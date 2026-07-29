@@ -38,17 +38,14 @@ questions can retain the conversation context.
 | `ComplaintsAgent.md` | Defines `bakery-complaints` for service recovery and escalation. |
 | `HoursAgent.md` | Defines `bakery-hours` for opening hours, locations, holidays, and delivery coverage. |
 | `SynthesizerAgent.md` | Defines `bakery-synthesizer`, which creates the final customer-facing response. |
-| `workflow.json` | Contains the Foundry workflow definition, including variables, agent invocations, routing conditions, and the fallback response. |
-
-> Although the file is named `workflow.json`, its contents use the YAML-style
-> workflow definition produced by the Foundry workflow editor.
+| `workflow.yaml` | Contains the Foundry workflow definition, including variables, agent invocations, routing conditions, and the fallback response. |
 
 ## Prerequisites
 
 - An Azure subscription
 - A Microsoft Foundry project
 - Access to the Foundry portal at [https://ai.azure.com](https://ai.azure.com)
-- A chat model deployment available to the project
+- GPT-4o and Claude Opus model deployments available to the project
 - Permission to create agents and workflows in the project
 
 The workflow builder may be shown as a preview feature, depending on the
@@ -56,14 +53,14 @@ Foundry portal version and region.
 
 ## Create the Agents in Foundry
 
-Create the agents before creating the workflow, because `workflow.json`
+Create the agents before creating the workflow, because `workflow.yaml`
 references them by name.
 
 For each Markdown file:
 
 1. Open the Foundry portal and select your project.
 2. Open the agent builder and create a new agent.
-3. Select a chat model deployment.
+3. Select the model deployment listed in the table below.
 4. Set the agent name exactly as shown below.
 5. Copy the text between the **Instructions** separators into the agent's
    instructions field.
@@ -73,23 +70,25 @@ For each Markdown file:
 
 Create these agents:
 
-| Markdown definition | Required agent name | Structured output |
-| --- | --- | --- |
-| `OrchestratorAgent.md` | `bakery-orchestrator` | Required |
-| `OrdersAgent.md` | `bakery-orders` | Required |
-| `MenuAgent.md` | `bakery-menu` | Required |
-| `ComplaintsAgent.md` | `bakery-complaints` | Required |
-| `HoursAgent.md` | `bakery-hours` | Required |
-| `SynthesizerAgent.md` | `bakery-synthesizer` | Not required |
+| Markdown definition | Required agent name | Model | Structured output |
+| --- | --- | --- | --- |
+| `OrchestratorAgent.md` | `bakery-orchestrator` | GPT-4o | Required |
+| `OrdersAgent.md` | `bakery-orders` | GPT-4o | Required |
+| `MenuAgent.md` | `bakery-menu` | GPT-4o | Required |
+| `ComplaintsAgent.md` | `bakery-complaints` | GPT-4o | Required |
+| `HoursAgent.md` | `bakery-hours` | GPT-4o | Required |
+| `SynthesizerAgent.md` | `bakery-synthesizer` | Claude Opus | Required |
 
 Agent names must match exactly. The workflow looks up each agent by its saved
-name.
+name. GPT-4o handles routing and structured specialist responses. Claude Opus
+is used for the synthesizer to produce the best customer-facing tone and
+wording.
 
 ## Create the Workflow in Foundry
 
 Create a blank workflow in the Foundry workflow builder. Use
 `BakeryOrchestrator` as the workflow name, then load or reproduce the
-definition in `workflow.json` using the workflow code editor.
+definition in `workflow.yaml` using the workflow code editor.
 
 If your Foundry portal does not provide a workflow code editor or import action,
 create the same nodes in the visual designer:
@@ -112,7 +111,7 @@ create the same nodes in the visual designer:
    | `hours` | `bakery-hours` | `Local.SpecialistResponse` |
 
 7. In the `else` branch, send the out-of-scope message defined in
-   `workflow.json`.
+   `workflow.yaml`.
 8. For a recognized route, build `Local.SynthesizerInput` from the original
    question and `Local.SpecialistResponse.answer`.
 9. Invoke `bakery-synthesizer` with `Local.SynthesizerInput` and use its output

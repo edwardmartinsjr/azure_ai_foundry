@@ -4,13 +4,9 @@ trigger:
   id: trigger_wf
   actions:
     - kind: SetVariable
-      id: questionplaintext
-      variable: Local.question
-      value: =System.LastMessage.Text
-    - kind: SetVariable
       id: SetVarUserMessage
       variable: Local.UserMessage
-      value: =UserMessage(System.LastMessage.Text)
+      value: =System.LastMessage.Text
     - kind: InvokeAzureAgent
       id: OrchestratorAgent
       agent:
@@ -30,12 +26,12 @@ trigger:
         - condition: =Local.Route = "orders"
           actions:
             - kind: InvokeAzureAgent
-              id: ordersAgent
+              id: OrdersAgent
               agent:
                 name: bakery-orders
               conversationId: =System.ConversationId
               input:
-                messages: =Local.UserMessage
+                messages: =UserMessage(Local.UserMessage)
               output:
                 autoSend: true
                 responseObject: Local.SpecialistResponse
@@ -48,7 +44,7 @@ trigger:
                 name: bakery-menu
               conversationId: =System.ConversationId
               input:
-                messages: =Local.UserMessage
+                messages: =UserMessage(Local.UserMessage)
               output:
                 autoSend: true
                 responseObject: Local.SpecialistResponse
@@ -61,7 +57,7 @@ trigger:
                 name: bakery-complaints
               conversationId: =System.ConversationId
               input:
-                messages: =Local.UserMessage
+                messages: =UserMessage(Local.UserMessage)
               output:
                 autoSend: true
                 responseObject: Local.SpecialistResponse
@@ -74,22 +70,22 @@ trigger:
                 name: bakery-hours
               conversationId: =System.ConversationId
               input:
-                messages: =Local.UserMessage
+                messages: =UserMessage(Local.UserMessage)
               output:
                 autoSend: true
                 responseObject: Local.SpecialistResponse
           id: if-hours
-      id: node-1780349139659
+      id: node-1785334824209
       elseActions:
         - kind: SendActivity
           activity: |-
-            That question is outside what I can help with at our Bakery.
-              I can help with:
-              - Order status, changes, and refunds
-              - Menu items, prices, ingredients, and allergens
-              - Complaints and feedback about your order
-              - Store hours, locations, and delivery coverage
-            Try one of those and I will get you the right answer.
+            That question is outside what I can help with at our bakery.
+            I can help with:
+            - Order status, changes, and refunds.
+            - Menu items, prices, ingredients, and allergens.
+            - Complaints and feedback about your order.
+            - Store hours, locations, and delivery coverage.
+            Try one of those, and I will get you the right answer.
           id: SendMessageCatchAll
     - kind: ConditionGroup
       conditions:
@@ -98,18 +94,19 @@ trigger:
             - kind: SetVariable
               id: SetSynthesizerInput
               variable: Local.SynthesizerInput
-              value: '="Customer question: " & Local.question & Char(10) & "Specialist answer: " & Local.SpecialistResponse.answer'
+              value: '="Customer question: " & Local.Question & Char(10) & "Specialist answer: " & Local.SpecialistResponse.answer'
             - kind: InvokeAzureAgent
               id: SynthesizerAgent
               agent:
                 name: bakery-synthesizer
               conversationId: =System.ConversationId
               input:
-                messages: =Local.SynthesizerInput
+                messages: =UserMessage(Local.SynthesizerInput)
               output:
                 autoSend: true
           id: if-not-else
-      id: node-1780349614635
+      id: node-1785338661443
+      elseActions: []
 id: ""
-name: BakeryOrchestrator
+name: bakery-orchestrator-v2
 description: ""
