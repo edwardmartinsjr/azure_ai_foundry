@@ -3,6 +3,7 @@ import json
 import os
 from typing import Any
 
+from agent_framework import workflow
 from agent_framework.foundry import FoundryAgent
 from azure.identity import AzureCliCredential
 from dotenv import load_dotenv
@@ -60,30 +61,29 @@ def connect_to_agent(
     )
 
 
-async def run_bakery_workflow(user_message_text: str) -> str:
-    """Run the Foundry route, specialist, and synthesis agents for one message."""
-    project_endpoint = os.getenv("PROJECT_ENDPOINT")
-    if not project_endpoint:
-        raise RuntimeError("Set PROJECT_ENDPOINT in .env.")
+def build_bakery_workflow(
+    project_endpoint: str,
+    credential: AzureCliCredential,
+):
+    """Build a functional workflow over the existing Foundry agents."""
+    orchestrator = connect_to_agent(
+        project_endpoint,
+        credential,
+        "orchestrator",
+    )
+    specialists = {
+        route: connect_to_agent(project_endpoint, credential, route)
+        for route in ("orders", "menu", "complaints", "hours")
+    }
+    synthesizer = connect_to_agent(
+        project_endpoint,
+        credential,
+        "synthesizer",
+    )
 
-    credential = AzureCliCredential()
-
-    try:
-        orchestrator = connect_to_agent(
-            project_endpoint,
-            credential,
-            "orchestrator",
-        )
-        specialists = {
-            route: connect_to_agent(project_endpoint, credential, route)
-            for route in ("orders", "menu", "complaints", "hours")
-        }
-        synthesizer = connect_to_agent(
-            project_endpoint,
-            credential,
-            "synthesizer",
-        )
-
+    @workflow
+    async def bakery_support_workflow(user_message_text: str) -> str:
+        """Route a request, call one specialist, and synthesize its response."""
         # Step 1: Invoke the existing orchestrator. Its Foundry definition
         # returns {"route": "orders|menu|complaints|hours|else"}.
         orchestrator_response = await orchestrator.run(user_message_text)
@@ -122,13 +122,16 @@ async def run_bakery_workflow(user_message_text: str) -> str:
         )
         final_response = await synthesizer.run(synthesizer_input)
         return final_response.text.strip()
-    finally:
-        credential.close()
+
+    return bakery_support_workflow
 
 
 async def main() -> None:
-    """Load local configuration and run one bakery-support request."""
+    """Load configuration and stream one functional workflow execution."""
     load_dotenv()
+    project_endpoint = os.getenv("PROJECT_ENDPOINT")
+    if not project_endpoint:
+        raise RuntimeError("Set PROJECT_ENDPOINT in .env.")
 
     user_message_text = os.getenv("USER_MESSAGE")
     if not user_message_text:
@@ -136,8 +139,25 @@ async def main() -> None:
     if not user_message_text:
         raise ValueError("Enter a customer message or set USER_MESSAGE in .env.")
 
-    final_output = await run_bakery_workflow(user_message_text)
-    print(f"\nBakery Support:\n{final_output}")
+    credential = AzureCliCredential()
+    try:
+        bakery_support_workflow = build_bakery_workflow(
+            project_endpoint,
+            credential,
+        )
+
+        # The functional workflow API returns a ResponseStream when stream=True.
+        # It includes lifecycle events as well as the final workflow output.
+        stream = bakery_support_workflow.run(user_message_text, stream=True)
+        async for event in stream:
+            if event.type == "output":
+                print(f"\nBakery Support:\n{event.data}")
+
+        # Awaiting the final response surfaces workflow failures and makes the
+        # completed WorkflowRunResult available for state/output inspection.
+        await stream.get_final_response()
+    finally:
+        credential.close()
 
 
 if __name__ == "__main__":
